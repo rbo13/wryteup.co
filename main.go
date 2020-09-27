@@ -19,6 +19,21 @@ func main() {
 	app := fiber.New()
 
 	// define middlewares
+	initializeMiddlewares(app)
+
+	app.Static("/", "./client/build")
+
+	// routes
+
+	// error handler
+	app.Get("/", fallback)
+	app.Use(notFound)
+
+	PORT := ":" + os.Getenv("APP_PORT")
+	log.Fatal(app.Listen(PORT))
+}
+
+func initializeMiddlewares(app *fiber.App) *fiber.App {
 	app.Use(
 		compress.New(compress.Config{
 			Level: compress.LevelBestSpeed,
@@ -34,16 +49,7 @@ func main() {
 		}),
 		helmet.New(),
 	)
-	app.Static("/", "./client/build")
-
-	// routes
-
-	// error handler
-	app.Get("/", fallback)
-	app.Use(notFound)
-
-	PORT := ":" + os.Getenv("APP_PORT")
-	log.Fatal(app.Listen(PORT))
+	return app
 }
 
 func notFound(c *fiber.Ctx) error {
