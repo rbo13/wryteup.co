@@ -10,20 +10,31 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/helmet/v2"
+	"wryteup.co/src/handler"
 
 	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
 	// initialize app
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Prefork: enabledPrefork(os.Getenv("ENABLED_PREFORK")),
+	})
 
 	// define middlewares
 	initializeMiddlewares(app)
 
+	// load handlers
+	h := handler.New()
+
 	app.Static("/", "./client/build")
 
-	// routes
+	// unprotected routes
+	app.Post("/login", h.Login)
+	app.Post("/signup", h.Signup)
+	// protected routes
+	api := app.Group("/api/v1")
+	api.Get("/users", h.UserList)
 
 	// error handler
 	app.Get("/", fallback)
@@ -63,4 +74,16 @@ func notFound(c *fiber.Ctx) error {
 func fallback(c *fiber.Ctx) error {
 	indexFile := "./client/build/index.html"
 	return c.SendFile(indexFile)
+}
+
+func enabledPrefork(env string) bool {
+	if env == "" {
+		return false
+	}
+
+	if env == "true" {
+		return true
+	}
+
+	return false
 }
