@@ -1,18 +1,24 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/helmet/v2"
+	"wryteup.co/db"
 	"wryteup.co/src/handler"
 
 	_ "github.com/joho/godotenv/autoload"
+	_ "github.com/lib/pq"
+	pg "wryteup.co/generated/db"
 )
 
 func main() {
@@ -24,8 +30,32 @@ func main() {
 	// define middlewares
 	initializeMiddlewares(app)
 
+	// connect to database
+	conn := &sql.DB{}
+	var err error
+	retries := 5
+	for retries > 0 {
+		conn, err = db.Connect(getDsn())
+		if err != nil {
+			log.Fatal(err)
+			retries -= 1
+			log.Printf("Retries remaining: %d \n", retries)
+			time.Sleep(3 * time.Second) // wait for 3 seconds before reattempting
+		}
+		break
+	}
+	defer conn.Close()
+
+	if err := conn.Ping(); err != nil {
+		log.Fatalf("Cannot connect to Postgres Database: %v\n", err)
+		os.Exit(-1)
+	}
+
+	log.Println("Successfully Connected to Database!")
+	db := pg.New(conn)
+
 	// load handlers
-	h := handler.New()
+	h := handler.New(db)
 
 	app.Static("/", "./client/build")
 
@@ -86,4 +116,15 @@ func enabledPrefork(env string) bool {
 	}
 
 	return false
+}
+
+func getDsn() string {
+	var (
+		DB_USER     = os.Getenv("POSTGRES_USER")
+		DB_PASSWORD = os.Getenv("POSTGRES_PASSWORD")
+		DB_HOST     = "appdb" // use the container name as the host to connect
+		DB_NAME     = os.Getenv("POSTGRES_DB")
+	)
+
+	return fmt.Sprintf("postgres://%s:%s@%s:5432/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 }

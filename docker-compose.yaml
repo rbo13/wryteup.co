@@ -4,11 +4,11 @@ services:
   db:
     image: postgres
     restart: always
-    container_name: app_database
+    container_name: appdb
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: wryteup_dev
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
@@ -20,11 +20,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: unless-stopped
     links:
       - db
     depends_on:
       - db
     container_name: wryteup_dev
+    networks:
+      - default
+    ports:
+      - '9001:9001'
+    volumes:
+      - .:/go/src/app
 
 volumes:
   pgdata:
