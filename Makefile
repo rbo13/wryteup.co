@@ -1,7 +1,7 @@
 .PHONY: dev postgres migrate generate docker cleanup
 
 dev: cleanup postgres migrate generate
-	cd client && yarn build;
+	cd client && yarn install && yarn build;
 	air;
 
 postgres:
