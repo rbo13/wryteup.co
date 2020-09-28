@@ -21,7 +21,8 @@ generate: migrate
 	sqlc generate;
 
 docker:
-	docker-compose up -d --build --force-recreate
+	./scripts/create-env.sh;
+	docker-compose up -d --build --force-recreate;
 
 cleanup:
 	sudo rm -rf pgdata;
