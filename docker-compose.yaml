@@ -14,7 +14,21 @@ services:
     ports:
       - '5432:5432'
     networks:
+      default:
+        aliases:
+          - database
+  migrate:
+    image: migrate/migrate
+    container_name: app_migrator
+    networks:
       - default
+    volumes:
+      - .:/migrations
+    command: ["-path", "/migrations", "-database",  "postgres://postgres:postgres@database:5432/wryteup_dev?sslmode=disable", "up", "3"]
+    depends_on:
+      - db
+    links:
+      - db
 
   app:
     build:
@@ -25,6 +39,7 @@ services:
       - db
     depends_on:
       - db
+      - migrate
     container_name: wryteup_dev
     networks:
       - default

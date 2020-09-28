@@ -10,13 +10,11 @@ ADD https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.
 RUN xz -d -c /usr/local/upx-3.96-amd64_linux.tar.xz | \
     tar -xOf - upx-3.96-amd64_linux/upx > /bin/upx && \
     chmod a+x /bin/upx
-RUN go get github.com/gobuffalo/pop/... # Database migrator
-RUN go install github.com/gobuffalo/pop/soda
 ENV GO111MODULE=on
 COPY . .
+RUN ls -lh
 RUN cd client && yarn install && \
 	yarn build
-RUN soda migrate up
 RUN go mod edit -require github.com/kyleconroy/sqlc@v1.4.0
 RUN go install github.com/kyleconroy/sqlc/cmd/sqlc
 RUN go mod tidy
@@ -32,6 +30,7 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /go/src/app/client/public/favicon.ico /client/public/favicon.ico
 COPY --from=build /go/src/app/client/build /client/build
 COPY --from=build /go/src/app/.env /.env
+COPY --from=build /go/src/app/migrations /migrations
 COPY --from=build /go/src/app/app /app
 WORKDIR /
 EXPOSE 9001

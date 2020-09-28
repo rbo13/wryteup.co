@@ -18,7 +18,13 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
+
+	// _ "github.com/golang-migrate/migrate/v4/source/file"
 	pg "wryteup.co/generated/db"
+)
+
+const (
+	migrationSource = "file://migrations"
 )
 
 func main() {
@@ -45,17 +51,18 @@ func main() {
 		break
 	}
 	defer conn.Close()
-
 	if err := conn.Ping(); err != nil {
 		log.Fatalf("Cannot connect to Postgres Database: %v\n", err)
 		os.Exit(-1)
 	}
 
 	log.Println("Successfully Connected to Database!")
-	db := pg.New(conn)
+
+	// instantiate repository
+	appDb := pg.New(conn)
 
 	// load handlers
-	h := handler.New(db)
+	h := handler.New(appDb)
 
 	app.Static("/", "./client/build")
 
@@ -122,9 +129,25 @@ func getDsn() string {
 	var (
 		DB_USER     = os.Getenv("POSTGRES_USER")
 		DB_PASSWORD = os.Getenv("POSTGRES_PASSWORD")
-		DB_HOST     = "appdb" // use the container name as the host to connect
+		DB_HOST     = "localhost" // use the container name as the host to connect
 		DB_NAME     = os.Getenv("POSTGRES_DB")
 	)
 
 	return fmt.Sprintf("postgres://%s:%s@%s:5432/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 }
+
+// func dbMigrate(conn *sql.DB) error {
+// 	driver, err := postgres.WithInstance(conn, &postgres.Config{})
+// 	if err != nil {
+// 		return err
+// 	}
+// 	m, err := migrate.NewWithDatabaseInstance(
+// 		migrationSource,
+// 		"postgres",
+// 		driver,
+// 	)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return m.Steps(2)
+// }
