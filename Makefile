@@ -1,6 +1,6 @@
 .PHONY: dev postgres migrate generate docker cleanup
 
-dev: cleanup postgres migrate generate
+dev: cleanup generate
 	cd client && yarn install && yarn build;
 	air;
 
@@ -9,7 +9,8 @@ postgres:
 		-e POSTGRES_PASSWORD=postgres \
 		-e POSTGRES_USER=postgres \
 		-e POSTGRES_DB=wryteup_dev \
-		postgres
+		postgres;
+	sleep 2;
 
 migrate: postgres
 	migrate -source file://migrations \
