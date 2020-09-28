@@ -26,5 +26,9 @@ cleanup:
 	sudo rm -rf pgdata;
 	docker-compose down;
 
+watch:
+	docker-compose down;
+	watchexec -w client -w src --exts js,css,html,go -r docker-compose restart app;
+
 
 # TODO: deploy script
