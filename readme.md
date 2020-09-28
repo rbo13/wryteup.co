@@ -34,13 +34,18 @@ $ go mod download
 ```
 
 ### Developing/Contributing:
+##### Pre-requisites:
+- `migrate` command is working. Check the installation [here](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate).
+- `sqlc` command is working. Check the installation [here](https://github.com/kyleconroy/sqlc#installation).
 ---
 ```sh
 $ cd wryteup.co
 $ go mod download
-$ cp -a .env.example .env
 $ make dev
 ```
+If you dont want to install any of the necessary requirements mentioned above, then you can just run using docker.
+
+
 > NOTE: to update your changes in the `client/` directory, run `yarn install` and then `yarn build` to create the react project.
 
 ---
