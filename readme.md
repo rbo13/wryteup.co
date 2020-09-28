@@ -38,6 +38,7 @@ $ go mod download
 ```sh
 $ cd wryteup.co
 $ go mod download
+$ cp -a .env.example .env
 $ make dev
 ```
 > NOTE: to update your changes in the `client/` directory, run `yarn install` and then `yarn build` to create the react project.
