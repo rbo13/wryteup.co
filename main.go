@@ -23,10 +23,6 @@ import (
 	pg "wryteup.co/generated/db"
 )
 
-const (
-	migrationSource = "file://migrations"
-)
-
 func main() {
 	// initialize app
 	app := fiber.New(fiber.Config{
@@ -135,19 +131,3 @@ func getDsn() string {
 
 	return fmt.Sprintf("postgres://%s:%s@%s:5432/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 }
-
-// func dbMigrate(conn *sql.DB) error {
-// 	driver, err := postgres.WithInstance(conn, &postgres.Config{})
-// 	if err != nil {
-// 		return err
-// 	}
-// 	m, err := migrate.NewWithDatabaseInstance(
-// 		migrationSource,
-// 		"postgres",
-// 		driver,
-// 	)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return m.Steps(2)
-// }
