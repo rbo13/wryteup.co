@@ -1,6 +1,6 @@
 .PHONY: dev postgres migrate cleanup
 
-dev: cleanup migrate
+dev: cleanup migrate generate
 	cd client && yarn build;
 	air;
 
@@ -14,6 +14,10 @@ postgres:
 migrate: postgres
 	migrate -source file://migrations \
 					-database postgres://postgres:postgres@localhost/wryteup_dev?sslmode=disable up
+
+generate: migrate
+	sqlc compile;
+	sqlc generate;
 
 # dev: cleanup
 # 	docker-compose --env-file=.env up -d --build --force-recreate;
