@@ -125,7 +125,7 @@ func getDsn() string {
 	var (
 		DB_USER     = os.Getenv("POSTGRES_USER")
 		DB_PASSWORD = os.Getenv("POSTGRES_PASSWORD")
-		DB_HOST     = "database" // use the container name or network alias as the host to connect
+		DB_HOST     = os.Getenv("DB_HOST") // use the container name or network alias as the host to connect
 		DB_NAME     = os.Getenv("POSTGRES_DB")
 	)
 

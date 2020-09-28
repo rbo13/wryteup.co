@@ -28,7 +28,7 @@ cleanup:
 
 watch:
 	docker-compose down;
-	watchexec -w client -w src --exts js,css,html,go -r docker-compose restart app;
+	watchexec -w client -w src --exts js,css,html,go -r cd client; yarn build; air;
 
 
 # TODO: deploy script
