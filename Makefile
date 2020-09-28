@@ -1,4 +1,4 @@
-.PHONY: dev postgres migrate cleanup
+.PHONY: dev postgres migrate generate docker cleanup
 
 dev: cleanup migrate generate
 	cd client && yarn build;
@@ -19,9 +19,12 @@ generate: migrate
 	sqlc compile;
 	sqlc generate;
 
-# dev: cleanup
-# 	docker-compose --env-file=.env up -d --build --force-recreate;
+docker:
+	docker-compose up -d --build --force-recreate
 
 cleanup:
 	sudo rm -rf pgdata;
 	docker-compose down;
+
+
+# TODO: deploy script
