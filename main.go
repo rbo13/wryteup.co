@@ -20,6 +20,7 @@ import (
 	_ "github.com/lib/pq"
 
 	// _ "github.com/golang-migrate/migrate/v4/source/file"
+	jwtware "github.com/gofiber/jwt/v2"
 	pg "wryteup.co/generated/db"
 )
 
@@ -51,10 +52,8 @@ func main() {
 		log.Fatalf("Cannot connect to Postgres Database: %v\n", err)
 		os.Exit(-1)
 	}
-
 	log.Println("Successfully Connected to Database!")
 
-	// instantiate repository
 	appDb := pg.New(conn)
 
 	// load handlers
@@ -65,8 +64,12 @@ func main() {
 	// unprotected routes
 	app.Post("/login", h.Login)
 	app.Post("/signup", h.Signup)
+
 	// protected routes
 	api := app.Group("/api/v1")
+	api.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte(os.Getenv("JWT_SIGNINGKEY")),
+	}))
 	api.Post("/users", h.Create)
 	api.Get("/users", h.UserList)
 
