@@ -5,3 +5,6 @@ CREATE TABLE IF NOT EXISTS tags (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	deleted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE UNIQUE INDEX uniq_tags_name_idx ON public.tags ("name");
+CREATE INDEX tags_name_idx ON public.tags ("name");

@@ -10,5 +10,4 @@ CREATE TABLE IF NOT EXISTS write_ups (
 	deleted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-/* CREATE INDEX CONCURRENTLY IF NOT EXISTS "idx_user_id_and_slug" */
-/* ON write_ups USING btree (user_id, slug_url); */
+CREATE INDEX write_ups_user_id_idx ON public.write_ups (user_id,slug_url);

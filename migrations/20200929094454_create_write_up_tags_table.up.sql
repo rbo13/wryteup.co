@@ -7,6 +7,4 @@ CREATE TABLE IF NOT EXISTS write_up_tags (
 	deleted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- create index using BTREE
-/* CREATE INDEX CONCURRENTLY IF NOT EXISTS "idx_write_up_and_tag" */
-/* ON write_up_tags USING btree (write_up_id, tag_id); */
+CREATE INDEX write_up_tags_write_up_id_idx ON public.write_up_tags (write_up_id,tag_id);
