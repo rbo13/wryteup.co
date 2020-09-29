@@ -1,4 +1,4 @@
-.PHONY: dev postgres migrate generate docker cleanup
+.PHONY: dev postgres migrate drop generate docker cleanup
 
 dev: cleanup generate
 	cd client && yarn install && yarn build;
@@ -15,6 +15,10 @@ postgres:
 migrate: postgres
 	migrate -source file://migrations \
 					-database postgres://postgres:postgres@localhost/wryteup_dev?sslmode=disable up
+
+drop:
+	migrate -source file://migrations \
+					-database postgres://postgres:postgres@localhost/wryteup_dev?sslmode=disable down
 
 generate: migrate
 	sqlc compile;

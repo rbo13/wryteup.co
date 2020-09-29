@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
 	id UUID UNIQUE PRIMARY KEY,
+  account_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
 	first_name VARCHAR(25) NOT NULL,
 	last_name VARCHAR(100) NOT NULL,
 	birth_date DATE NOT NULL,
@@ -7,3 +8,5 @@ CREATE TABLE IF NOT EXISTS users (
 	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	deleted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX users_account_id_idx ON public.users (account_id);
