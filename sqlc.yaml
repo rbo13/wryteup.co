@@ -4,4 +4,4 @@ packages:
     path: "generated/db"
     emit_json_tags: true
     schema: "./migrations"
-    queries: "./db/queries/queries.sql"
+    queries: "./db/queries"
