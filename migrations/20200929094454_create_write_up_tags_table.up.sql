@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS write_up_tags (
 );
 
 -- create index using BTREE
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "idx_write_up_and_tag"
-ON write_up_tags USING btree (write_up_id, tag_id);
+/* CREATE INDEX CONCURRENTLY IF NOT EXISTS "idx_write_up_and_tag" */
+/* ON write_up_tags USING btree (write_up_id, tag_id); */
