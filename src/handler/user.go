@@ -120,6 +120,41 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 	})
 }
 
+// UserAccountID handles the querying of user information
+// by using the account_id parameter in request.
+func (h *Handler) UserAccountId(c *fiber.Ctx) error {
+	accountID := c.Params("account_id")
+
+	if accountID == "" {
+		return c.Status(http.StatusUnauthorized).JSON(&fiber.Map{
+			"success": false,
+			"message": "Account ID is missing",
+			"data":    nil,
+		})
+	}
+	accountUUID, err := uuid.Parse(accountID)
+	if err != nil {
+		return c.Status(http.StatusUnauthorized).JSON(&fiber.Map{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+	}
+	user, err := h.db.GetUserByAccount(c.Context(), accountUUID)
+	if err != nil {
+		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+	}
+	return c.Status(http.StatusOK).JSON(&fiber.Map{
+		"success": true,
+		"message": "User retrieved successfully!",
+		"data":    user,
+	})
+}
+
 func extractClaims(tokenStr string) (jwt.MapClaims, bool) {
 	hmacSecret := []byte(os.Getenv("JWT_SIGNINGKEY"))
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {

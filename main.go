@@ -24,6 +24,8 @@ import (
 	pg "wryteup.co/generated/db"
 )
 
+const staticBuild = "./client/build"
+
 func main() {
 	// initialize app
 	app := fiber.New(fiber.Config{
@@ -59,7 +61,7 @@ func main() {
 	// load handlers
 	h := handler.New(appDb)
 
-	app.Static("/", "./client/build")
+	app.Static("/", staticBuild)
 
 	// unprotected routes
 	app.Post("/login", h.Login)
@@ -70,8 +72,10 @@ func main() {
 	api.Use(jwtware.New(jwtware.Config{
 		SigningKey: []byte(os.Getenv("JWT_SIGNINGKEY")),
 	}))
-	api.Post("/users", h.Create)
-	api.Get("/users", h.UserList)
+	user := api.Group("/users")
+	user.Post("/", h.Create)
+	user.Get("/", h.UserList)
+	user.Get("/:account_id", h.UserAccountId)
 
 	// error handler
 	app.Get("/", fallback)
