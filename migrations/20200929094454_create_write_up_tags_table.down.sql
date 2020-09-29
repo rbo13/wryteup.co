@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS write_up_tags CASCADE;
