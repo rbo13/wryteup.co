@@ -67,6 +67,7 @@ func main() {
 	app.Post("/signup", h.Signup)
 	// protected routes
 	api := app.Group("/api/v1")
+	api.Post("/users", h.Create)
 	api.Get("/users", h.UserList)
 
 	// error handler
