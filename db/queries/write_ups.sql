@@ -12,6 +12,12 @@ FROM write_ups
 WHERE is_published = true
 ORDER BY created_at DESC;
 
+-- name: GetWriteupFromSlugURL :one
+SELECT *
+FROM write_ups
+WHERE slug_url = $1
+LIMIT 1;
+
 -- name: GetWriteUpFromOwner :many
 SELECT *
 FROM write_ups

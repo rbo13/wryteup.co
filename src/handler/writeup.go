@@ -36,9 +36,9 @@ func (h *Handler) GetAllPublishedWriteups(c *fiber.Ctx) error {
 // GetAllWriteupsFromUser returns a slice of Writeups
 // from a give user_id.
 func (h *Handler) GetAllWriteupsFromUser(c *fiber.Ctx) error {
-	userId := c.Params("user_id")
+	userID := c.Params("user_id")
 
-	userUUID, err := uuid.Parse(userId)
+	userUUID, err := uuid.Parse(userID)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"success": false,
@@ -60,6 +60,27 @@ func (h *Handler) GetAllWriteupsFromUser(c *fiber.Ctx) error {
 		"success": true,
 		"message": "Write ups successfully retrieved",
 		"data":    writeups,
+	})
+}
+
+// GetWriteupFromSlug returns a single Writeup
+// from a given slug value.
+func (h *Handler) GetWriteupFromSlug(c *fiber.Ctx) error {
+	slugURL := c.Params("slug_url")
+
+	writeup, err := h.db.GetWriteupFromSlugURL(c.Context(), slugURL)
+	if err != nil {
+		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(&fiber.Map{
+		"success": true,
+		"message": "Write up successfully retrieved",
+		"data":    writeup,
 	})
 }
 
