@@ -1,9 +1,13 @@
 import React from 'react';
 import {
+  Anchor,
   Box,
+  Footer,
   Grommet,
+  Text,
 } from 'grommet';
 import AppHeader from './components/nav/AppHeader'
+import Section from './components/Section';
 
 /*
 colors:
@@ -38,6 +42,13 @@ function App() {
           </Box>
         </Box>
       </Box>
+      <Section>
+        <Footer
+        >
+          <Text>Copyright</Text>
+          <Anchor label="About" />
+        </Footer>
+      </Section>
     </Grommet>
   );
 }
