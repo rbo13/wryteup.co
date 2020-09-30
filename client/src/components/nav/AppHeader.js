@@ -15,6 +15,7 @@ export default function AppHeader() {
           pad={{ top: 'large', horizontal: 'xlarge' }}
         >
           <Anchor
+            alignSelf='center'
             label={
               size !== 'xsmall' &&
               size !== 'small' ? <Text size='large'>wryteup</Text> : null
