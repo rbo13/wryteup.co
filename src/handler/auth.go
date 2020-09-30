@@ -28,7 +28,7 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 		})
 	}
 
-	user, err := h.db.Login(c.Context(), account.EmailAddress)
+	accountInfo, err := h.db.Login(c.Context(), account.EmailAddress)
 	if err != nil {
 		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"success": false,
@@ -37,8 +37,7 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 		})
 	}
 
-	passwordsEqual := comparePasswords(account.Password, user.Password)
-
+	passwordsEqual := comparePasswords(account.Password, accountInfo.Password)
 	if !passwordsEqual {
 		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"success": false,
@@ -50,7 +49,7 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	// create JWT token
 	jwtToken := jwt.New(jwt.SigningMethodHS256)
 	claims := jwtToken.Claims.(jwt.MapClaims)
-	claims["account_id"] = user.ID
+	claims["account_id"] = accountInfo.ID
 	claims["authenticated"] = true
 	claims["exp"] = time.Now().Add(1 * time.Hour).Unix()
 

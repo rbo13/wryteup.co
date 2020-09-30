@@ -24,7 +24,11 @@ import (
 	pg "wryteup.co/generated/db"
 )
 
-const staticBuild = "./client/build"
+const (
+	staticBuild = "./client/build"
+	idxFile     = "./client/build/index.html"
+	favIco      = "./client/public/favicon.ico"
+)
 
 func main() {
 	// initialize app
@@ -77,6 +81,13 @@ func main() {
 	user.Get("/", h.UserList)
 	user.Get("/:account_id", h.UserAccountId)
 
+	writeup := api.Group("/writeups")
+	writeup.Post("/", h.CreateWriteUp)
+	writeup.Get("/", h.GetAllPublishedWriteups)
+	writeup.Get("/all", h.GetAllWriteups)
+	writeup.Get("/:slug_url", h.GetWriteupFromSlug)
+	writeup.Get("/user/:user_id", h.GetAllWriteupsFromUser)
+
 	// error handler
 	app.Get("/", fallback)
 	app.Use(notFound)
@@ -97,7 +108,7 @@ func initializeMiddlewares(app *fiber.App) *fiber.App {
 			Output:     os.Stdout,
 		}),
 		favicon.New(favicon.Config{
-			File: "./client/public/favicon.ico",
+			File: favIco,
 		}),
 		helmet.New(),
 	)
@@ -113,7 +124,7 @@ func notFound(c *fiber.Ctx) error {
 
 // render index.html when hitting / route.
 func fallback(c *fiber.Ctx) error {
-	indexFile := "./client/build/index.html"
+	indexFile := idxFile
 	return c.SendFile(indexFile)
 }
 
