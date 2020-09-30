@@ -1,12 +1,9 @@
 import React from 'react';
 import {
   Box,
-  Button,
-  Heading,
   Grommet,
-  ResponsiveContext,
 } from 'grommet';
-import { Notification } from 'grommet-icons';
+import AppHeader from './components/nav/AppHeader'
 
 /*
 colors:
@@ -30,45 +27,17 @@ const theme = {
   },
 };
 
-const AppBar = (props) => (
-  <Box
-    tag='header'
-    direction='row'
-    align='center'
-    justify='between'
-    background='brand'
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-    elevation='small'
-    style={{ zIndex: '1' }}
-    {...props}
-  />
-);
-
 function App() {
-  const [showSidebar, setShowSidebar] = React.useState(false)
-
   return (
     <Grommet theme={theme} full>
-      <ResponsiveContext.Consumer>
-        {size => (
-          <Box fill>
-            <AppBar>
-              <Heading level='3' margin='none'>wryteup</Heading>
-              <Button
-                icon={<Notification />}
-                onClick={() => setShowSidebar(!showSidebar)}
-              />
-            </AppBar>
-            <Box direction='row' flex overflow={{ horizontal: 'hidden' }}>
-              <Box flex align='center' justify='center'>
-                <main>
-                  Main body
-                </main>
-              </Box>
-            </Box>
+      <AppHeader />
+      <Box fill>
+        <Box direction='row' flex overflow={{ horizontal: 'hidden' }}>
+          <Box as='main' flex align='center' justify='center'>
+            Main content
           </Box>
-        )}
-      </ResponsiveContext.Consumer>
+        </Box>
+      </Box>
     </Grommet>
   );
 }
