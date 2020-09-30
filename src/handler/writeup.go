@@ -14,6 +14,23 @@ import (
 
 const defaultLang = "en"
 
+func (h *Handler) GetAllWriteups(c *fiber.Ctx) error {
+	writeups, err := h.db.GetAllWriteups(c.Context())
+	if err != nil {
+		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(&fiber.Map{
+		"success": true,
+		"message": "Writeups successfully retrieved",
+		"data":    writeups,
+	})
+}
+
 // GetAllPublishedWriteUps returns a slice of Writeups
 // if its published.
 func (h *Handler) GetAllPublishedWriteups(c *fiber.Ctx) error {
