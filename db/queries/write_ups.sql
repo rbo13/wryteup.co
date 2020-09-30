@@ -6,6 +6,12 @@ ON write_ups.id = write_up_tags.write_up_id
 WHERE write_up_tags.tag_id = $1
 ORDER BY write_up.created_at DESC;
 
+-- name: GetWriteUpFromOwner :many
+SELECT *
+FROM write_ups
+WHERE user_id = $1
+ORDER BY created_at DESC;
+
 -- name: CreateWriteup :one
 INSERT INTO write_ups (id, user_id, title, content, slug_url, created_at, updated_at, deleted_at)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;

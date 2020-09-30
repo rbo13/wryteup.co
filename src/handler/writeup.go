@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -69,7 +71,8 @@ func (h *Handler) CreateWriteUp(c *fiber.Ctx) error {
 		})
 	}
 
-	slug_url := slug.MakeLang(writeup.Title, defaultLang)
+	idx := strings.Split(user.ID.String(), "-")[1]
+	slug_url := fmt.Sprintf("%s-%s", slug.MakeLang(writeup.Title, defaultLang), idx)
 
 	createdWriteup, err := h.db.CreateWriteup(c.Context(), pg.CreateWriteupParams{
 		ID:        uuid.New(),
@@ -79,7 +82,6 @@ func (h *Handler) CreateWriteUp(c *fiber.Ctx) error {
 		SlugUrl:   slug_url,
 		CreatedAt: time.Now(),
 	})
-
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"success": false,
@@ -87,6 +89,7 @@ func (h *Handler) CreateWriteUp(c *fiber.Ctx) error {
 			"data":    nil,
 		})
 	}
+
 	return c.Status(http.StatusCreated).JSON(&fiber.Map{
 		"success": true,
 		"message": "Write up successfully created!",
