@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS write_ups (
   title TEXT NOT NULL,
   content TEXT NOT NULL,
   slug_url TEXT NOT NULL,
+	is_published BOOLEAN NOT NULL DEFAULT false,
   appreciates INT NOT NULL DEFAULT 0, -- our term for upvote, like, and etc...
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

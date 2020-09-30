@@ -77,6 +77,9 @@ func main() {
 	user.Get("/", h.UserList)
 	user.Get("/:account_id", h.UserAccountId)
 
+	writeup := api.Group("/writeups")
+	writeup.Post("/", h.CreateWriteUp)
+
 	// error handler
 	app.Get("/", fallback)
 	app.Use(notFound)
