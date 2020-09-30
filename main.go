@@ -81,6 +81,9 @@ func main() {
 	user.Get("/", h.UserList)
 	user.Get("/:account_id", h.UserAccountId)
 
+	tags := api.Group("/tags")
+	tags.Post("/", h.CreateTag)
+
 	writeup := api.Group("/writeups")
 	writeup.Post("/", h.CreateWriteUp)
 	writeup.Get("/", h.GetAllPublishedWriteups)
