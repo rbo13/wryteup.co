@@ -14,6 +14,8 @@ import (
 
 const defaultLang = "en"
 
+// GetAllPublishedWriteUps returns a slice of Writeups
+// if its published.
 func (h *Handler) GetAllPublishedWriteups(c *fiber.Ctx) error {
 	writeups, err := h.db.GetAllPublishedWriteups(c.Context())
 	if err != nil {
@@ -27,6 +29,36 @@ func (h *Handler) GetAllPublishedWriteups(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(&fiber.Map{
 		"success": true,
 		"message": "Write ups successsfully retrieved",
+		"data":    writeups,
+	})
+}
+
+// GetAllWriteupsFromUser returns a slice of Writeups
+// from a give user_id.
+func (h *Handler) GetAllWriteupsFromUser(c *fiber.Ctx) error {
+	userId := c.Params("user_id")
+
+	userUUID, err := uuid.Parse(userId)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+	}
+
+	writeups, err := h.db.GetWriteUpFromOwner(c.Context(), userUUID)
+	if err != nil {
+		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"success": false,
+			"message": err.Error(),
+			"data":    writeups,
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(&fiber.Map{
+		"success": true,
+		"message": "Write ups successfully retrieved",
 		"data":    writeups,
 	})
 }

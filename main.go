@@ -84,6 +84,7 @@ func main() {
 	writeup := api.Group("/writeups")
 	writeup.Post("/", h.CreateWriteUp)
 	writeup.Get("/", h.GetAllPublishedWriteups)
+	writeup.Get("/:user_id", h.GetAllWriteupsFromUser)
 
 	// error handler
 	app.Get("/", fallback)
