@@ -14,6 +14,10 @@ import (
 
 const defaultLang = "en"
 
+func (h *Handler) GetAllPublishedWriteups(c *fiber.Ctx) error {
+	return nil
+}
+
 // CreateWriteUp handles the POST request
 // to create a new write up.
 func (h *Handler) CreateWriteUp(c *fiber.Ctx) error {
