@@ -6,6 +6,12 @@ ON write_ups.id = write_up_tags.write_up_id
 WHERE write_up_tags.tag_id = $1
 ORDER BY write_up.created_at DESC;
 
+-- name: GetAllPublishedWriteups :many
+SELECT *
+FROM write_ups
+WHERE is_published = true
+ORDER BY created_at DESC;
+
 -- name: GetWriteUpFromOwner :many
 SELECT *
 FROM write_ups
