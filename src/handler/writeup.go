@@ -15,20 +15,21 @@ import (
 const defaultLang = "en"
 
 func (h *Handler) GetAllWriteups(c *fiber.Ctx) error {
-	writeups, err := h.db.GetAllWriteups(c.Context())
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
-			"success": false,
-			"message": err.Error(),
-			"data":    nil,
-		})
-	}
+	// writeups, err := h.db.GetAllWriteups(c.Context())
+	// if err != nil {
+	// 	return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+	// 		"success": false,
+	// 		"message": err.Error(),
+	// 		"data":    nil,
+	// 	})
+	// }
 
-	return c.Status(http.StatusOK).JSON(&fiber.Map{
-		"success": true,
-		"message": "Writeups successfully retrieved",
-		"data":    writeups,
-	})
+	// return c.Status(http.StatusOK).JSON(&fiber.Map{
+	// 	"success": true,
+	// 	"message": "Writeups successfully retrieved",
+	// 	"data":    writeups,
+	// })
+	return c.Status(http.StatusOK).Send([]byte("Implement this!!"))
 }
 
 // GetAllPublishedWriteUps returns a slice of Writeups
@@ -167,8 +168,10 @@ func (h *Handler) CreateWriteUp(c *fiber.Ctx) error {
 		Title:     writeup.Title,
 		Content:   writeup.Content,
 		SlugUrl:   slug_url,
+		Tags:      writeup.Tags,
 		CreatedAt: time.Now(),
 	})
+
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"success": false,
