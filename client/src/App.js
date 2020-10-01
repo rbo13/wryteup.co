@@ -8,6 +8,7 @@ import {
 } from 'grommet';
 import AppHeader from './components/nav/AppHeader'
 import Section from './components/Section';
+import { Signup } from './components/screens/Signup';
 
 /*
 colors:
@@ -38,7 +39,7 @@ function App() {
       <Box fill>
         <Box direction='row' flex overflow={{ horizontal: 'hidden' }}>
           <Box as='main' flex align='center' justify='center'>
-            Main content
+            <Signup />
           </Box>
         </Box>
       </Box>
