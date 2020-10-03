@@ -7,9 +7,9 @@ async function login({email, password}) {
     email_address: email,
     password: password,
   };
-  const response = await client(endpoint, {data});
-  console.log(response);
-  return response;
+  const loginResponse = await client(endpoint, {data});
+  console.log(`The response from login: ${loginResponse}`);
+  return loginResponse;
 }
 
 async function client(
