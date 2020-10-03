@@ -14,7 +14,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import {GlobalContext} from '../context';
-import {AuthMenu, AuthMobileMenu} from '../authenticated-app/auth_menu';
+import {AuthMenu, AuthMobileMenu, UnauthMenu} from '../authenticated-app/auth_menu';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -181,7 +181,8 @@ export default function PrimarySearchAppBar() {
             <AuthMenu
               menuId={menuId}
               handleProfileMenuOpen={handleProfileMenuOpen}
-            /> : null
+            /> :
+            <UnauthMenu />
           }
           { authenticated ?
             <AuthMobileMenu

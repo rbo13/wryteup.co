@@ -4,8 +4,11 @@ import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   sectionDesktop: {
@@ -21,6 +24,28 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const UnauthMenu = () => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.sectionDesktop}>
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+      >
+        <Grid item>
+          <Typography className={classes.title} variant="h6" noWrap>
+            <Link color="inherit" href="/login" style={{ textDecoration: 'none' }}>
+              Login
+            </Link>
+          </Typography>
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
 
 const AuthMenu = (props) => {
   const classes = useStyles();
@@ -67,9 +92,10 @@ const AuthMobileMenu = (props) => {
       </IconButton>
     </div>
   );
-}
+};
 
 export {
   AuthMenu,
   AuthMobileMenu,
+  UnauthMenu,
 };
