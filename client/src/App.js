@@ -20,7 +20,6 @@ function App() {
     <div>
       <PrimarySearchAppBar />
       <Container component="main" className={classes.main} maxWidth="sm">
-        {/* TODO:: set up app routes here */}
         { authenticated ?
           <AuthenticatedApp /> :
           <UnauthenticatedApp />
