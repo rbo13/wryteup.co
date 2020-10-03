@@ -1,56 +1,32 @@
 import React from 'react';
-import {
-  Anchor,
-  Box,
-  Footer,
-  Grommet,
-  Text,
-} from 'grommet';
-import AppHeader from './components/nav/AppHeader'
-import Section from './components/Section';
-import { Signup } from './components/screens/Signup';
+import {makeStyles} from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import PrimarySearchAppBar from './components/AppBar';
+import {Footer} from './components/Footer';
 
-/*
-colors:
-  Rich Black = #04080F
-  Glaucous = #507DBC
-  Baby Blue Eyes = #A1C6EA
-  Beau Blue = #BBD1EA
-  Gainsboro = #DAE3E5
-*/
-
-const theme = {
-  global: {
-    colors: {
-      brand: '#04080F',
-    },
-    font: {
-      family: 'Roboto',
-      size: '14px',
-      height: '18px',
-    },
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
   },
-};
+  main: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(2),
+  },
+}));
 
 function App() {
+  const classes = useStyles();
+
   return (
-    <Grommet theme={theme} full>
-      <AppHeader />
-      <Box fill>
-        <Box direction='row' flex overflow={{ horizontal: 'hidden' }}>
-          <Box as='main' flex align='center' justify='center'>
-            <Signup />
-          </Box>
-        </Box>
-      </Box>
-      <Section>
-        <Footer
-        >
-          <Text>Copyright</Text>
-          <Anchor label="About" />
-        </Footer>
-      </Section>
-    </Grommet>
+    <div className={classes.root}>
+      <PrimarySearchAppBar />
+      <Container component="main" className={classes.main} maxWidth="sm">
+        {/* TODO:: set up app routes here */}
+      </Container>
+      <Footer />
+    </div>
   );
 }
 
