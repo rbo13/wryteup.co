@@ -39,7 +39,7 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^7.10.0",
+    "eslint": "^6.6.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.3.1",

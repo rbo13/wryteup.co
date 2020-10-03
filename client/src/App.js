@@ -3,6 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import PrimarySearchAppBar from './components/AppBar';
 import {Footer} from './components/Footer';
+import Signup from './screens/Signup';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
   },
   main: {
-    marginTop: theme.spacing(8),
     marginBottom: theme.spacing(2),
   },
 }));
@@ -24,6 +24,7 @@ function App() {
       <PrimarySearchAppBar />
       <Container component="main" className={classes.main} maxWidth="sm">
         {/* TODO:: set up app routes here */}
+        <Signup />
       </Container>
       <Footer />
     </div>
