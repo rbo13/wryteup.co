@@ -2,6 +2,7 @@ import React from 'react';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
@@ -158,7 +159,9 @@ export default function PrimarySearchAppBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            wryteup
+            <Link color="inherit" href="/" style={{ textDecoration: 'none' }}>
+              wryteup
+            </Link>{' '}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
