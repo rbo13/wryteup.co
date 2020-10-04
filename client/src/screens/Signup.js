@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import {Link as RouterLink} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
@@ -13,13 +11,14 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {useForm} from 'react-hook-form';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        wryteup
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -49,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const {register, handleSubmit, errors} = useForm();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -60,10 +60,19 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={handleSubmit((data) => alert(JSON.stringify(data)))}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                error={errors.firstName ? true : false}
+                inputRef={register({
+                  required: true,
+                  maxLength: 15,
+                })}
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
@@ -72,10 +81,18 @@ export default function SignUp() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                helperText={
+                  errors.firstName && errors.firstName.type === 'required' ?
+                    'First name is required' : null
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                inputRef={register({
+                  required: true,
+                  maxLength: 25,
+                })}
                 variant="outlined"
                 required
                 fullWidth
@@ -87,6 +104,13 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                inputRef={register({
+                  required: 'Required',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Invalid email address',
+                  },
+                })}
                 variant="outlined"
                 required
                 fullWidth
@@ -98,6 +122,13 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                inputRef={register({
+                  required: 'Password is required',
+                  minLength: {
+                    value: 8,
+                    message: 'Password must have at least 8 characters',
+                  },
+                })}
                 variant="outlined"
                 required
                 fullWidth
@@ -106,12 +137,6 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="Check.."
               />
             </Grid>
           </Grid>
