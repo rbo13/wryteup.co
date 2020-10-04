@@ -82,13 +82,16 @@ export default function SignUp() {
                 label="First Name"
                 autoFocus
                 helperText={
-                  errors.firstName && errors.firstName.type === 'required' ?
-                    'First name is required' : null
+                  (errors.firstName && errors.firstName.type === 'required' ?
+                    'First name is required' : null) ||
+                  (errors.firstName && errors.firstName.type === 'maxLength' ?
+                    'Max Length exceeded' : null)
                 }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                error={errors.lastName ? true : false}
                 inputRef={register({
                   required: true,
                   maxLength: 25,
@@ -100,6 +103,12 @@ export default function SignUp() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                helperText={
+                  (errors.lastName && errors.lastName.type === 'required' ?
+                    'Last name is required' : null) ||
+                  (errors.lastName && errors.lastName.type === 'maxLength' ?
+                    'Max Length exceeded' : null)
+                }
               />
             </Grid>
             <Grid item xs={12}>
