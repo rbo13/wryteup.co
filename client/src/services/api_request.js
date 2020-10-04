@@ -12,6 +12,17 @@ async function login({email, password}) {
   return loginResponse;
 }
 
+async function signup({email, password}) {
+  const endpoint = 'signup';
+  const data = {
+    email_address: email,
+    password,
+  };
+  const signupResponse = await client(endpoint, {data});
+  console.log(`The response from signup: ${signupResponse}`);
+  return signupResponse;
+}
+
 async function client(
     endpoint,
     {data, token, headers: customHeaders, ...customConfig} = {},
@@ -52,4 +63,5 @@ async function client(
 export {
   client,
   login,
+  signup,
 };

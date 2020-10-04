@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useForm} from 'react-hook-form';
+import {GlobalContext} from '../context';
 
 function Copyright() {
   return (
@@ -48,7 +49,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const {authenticated, userSignup} = React.useContext(GlobalContext);
   const {register, handleSubmit, errors} = useForm();
+
+  const signup = (form) => {
+    console.log(form);
+    console.log(userSignup);
+    console.log(authenticated);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -63,7 +71,7 @@ export default function SignUp() {
         <form
           className={classes.form}
           noValidate
-          onSubmit={handleSubmit((data) => alert(JSON.stringify(data)))}
+          onSubmit={handleSubmit(signup)}
         >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

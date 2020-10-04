@@ -1,6 +1,7 @@
-import {login} from '../services/api_request';
+import {login, signup} from '../services/api_request';
 
 const ACTION_LOGIN = 'USER_LOGIN';
+const ACTION_SIGNUP = 'USER_SIGNUP';
 const ACTION_SET_AUTH_TOKEN = 'AUTH_TOKEN';
 const ACTION_SET_USER = 'SET_USER';
 
@@ -10,6 +11,14 @@ const reducer = async (state, action) => {
       // do client request...
       const {email, password} = action.payload;
       await login({
+        email,
+        password,
+      });
+      break;
+    }
+    case ACTION_SIGNUP: {
+      const {email, password} = action.payload;
+      await signup({
         email,
         password,
       });
@@ -37,6 +46,7 @@ const reducer = async (state, action) => {
 export {
   reducer,
   ACTION_LOGIN,
+  ACTION_SIGNUP,
   ACTION_SET_AUTH_TOKEN,
   ACTION_SET_USER,
 };
