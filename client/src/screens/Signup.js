@@ -9,10 +9,12 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useForm} from 'react-hook-form';
-import {GlobalContext} from '../context';
+import {signup} from '../services/api_request';
 
 function Copyright() {
   return (
@@ -25,6 +27,10 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -49,13 +55,42 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-  const {authenticated, userSignup} = React.useContext(GlobalContext);
   const {register, handleSubmit, errors} = useForm();
+  const [openAlert, setOpenAlert] = React.useState({
+    open: false,
+    success: true,
+    message: '',
+  });
 
-  const signup = (form) => {
-    console.log(form);
-    console.log(userSignup);
-    console.log(authenticated);
+  const {open, success, message} = openAlert;
+
+  const userSignup = async (form) => {
+    const {email, password} = form;
+
+    try {
+      const response = await signup({
+        email,
+        password,
+      });
+      setOpenAlert({
+        open: true,
+        success: true,
+        message: response.message,
+      });
+      return;
+    } catch (err) {
+      // setOpenAlert({
+      //   open: true,
+      //   success: false,
+      //   message: err.message,
+      // });
+    }
+  };
+
+  const handleClose = () => {
+    setOpenAlert({
+      open: false,
+    });
   };
 
   return (
@@ -71,54 +106,9 @@ export default function SignUp() {
         <form
           className={classes.form}
           noValidate
-          onSubmit={handleSubmit(signup)}
+          onSubmit={handleSubmit(userSignup)}
         >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                error={errors.firstName ? true : false}
-                inputRef={register({
-                  required: true,
-                  maxLength: 15,
-                })}
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                helperText={
-                  (errors.firstName && errors.firstName.type === 'required' ?
-                    'First name is required' : null) ||
-                  (errors.firstName && errors.firstName.type === 'maxLength' ?
-                    'Max Length exceeded' : null)
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                error={errors.lastName ? true : false}
-                inputRef={register({
-                  required: true,
-                  maxLength: 25,
-                })}
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                helperText={
-                  (errors.lastName && errors.lastName.type === 'required' ?
-                    'Last name is required' : null) ||
-                  (errors.lastName && errors.lastName.type === 'maxLength' ?
-                    'Max Length exceeded' : null)
-                }
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 error={errors.email ? true : false}
@@ -190,6 +180,19 @@ export default function SignUp() {
       <Box mt={5}>
         <Copyright />
       </Box>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity={success ? 'success' : 'error'}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

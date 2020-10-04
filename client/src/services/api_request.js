@@ -18,9 +18,7 @@ async function signup({email, password}) {
     email_address: email,
     password,
   };
-  const signupResponse = await client(endpoint, {data});
-  console.log(`The response from signup: ${signupResponse}`);
-  return signupResponse;
+  return client(endpoint, {data});
 }
 
 async function client(
@@ -52,7 +50,7 @@ async function client(
         const data = await response.json();
         if (!response.ok) {
           return Promise.reject(
-              new Error('Something went wrong with the request'),
+              new Error(data.message),
           );
         }
 

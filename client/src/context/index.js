@@ -1,5 +1,5 @@
 import React from 'react';
-import {reducer, ACTION_LOGIN, ACTION_SIGNUP} from './reducer';
+import {reducer, ACTION_LOGIN} from './reducer';
 
 const initialState = {
   authenticated: false,
@@ -23,16 +23,6 @@ const AppProvider = ({children}) => {
     });
   };
 
-  const userSignup = ({email, password}) => {
-    dispatch({
-      type: ACTION_SIGNUP,
-      payload: {
-        email,
-        password,
-      },
-    });
-  };
-
   return (
     <GlobalContext.Provider
       value={{
@@ -40,7 +30,6 @@ const AppProvider = ({children}) => {
         authToken: state.authToken,
         authenticated: state.authenticated,
         userLogin,
-        userSignup,
       }}
     >
       { children }
