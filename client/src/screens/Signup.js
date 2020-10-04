@@ -113,8 +113,9 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={errors.email ? true : false}
                 inputRef={register({
-                  required: 'Required',
+                  required: 'Email Address is required',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     message: 'Invalid email address',
@@ -127,10 +128,14 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                helperText={
+                  errors.email ? errors.email.message : null
+                }
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={errors.password ? true : false}
                 inputRef={register({
                   required: 'Password is required',
                   minLength: {
@@ -146,6 +151,9 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                helperText={
+                  errors.password ? errors.password.message : null
+                }
               />
             </Grid>
           </Grid>
