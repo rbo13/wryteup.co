@@ -55,7 +55,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-  const {register, handleSubmit, errors} = useForm();
+  const {register, handleSubmit, errors, watch} = useForm();
+  const password = React.useRef({});
+  password.current = watch('password', '');
+
   const [openAlert, setOpenAlert] = React.useState({
     open: false,
     success: false,
@@ -72,8 +75,9 @@ export default function SignUp() {
       setOpenAlert({
         open: true,
         success: true,
-        message: response.message,
+        message: 'Please login to continue',
       });
+      setTimeout(() => window.location.href = '/login', 3000);
     }).catch((err) => {
       setOpenAlert({
         open: true,
@@ -141,6 +145,33 @@ export default function SignUp() {
                 autoComplete="current-password"
                 helperText={
                   errors.password ? errors.password.message : null
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                error={errors.confirmPassword ? true : false}
+                inputRef={register({
+                  required: 'Confirm Password is required',
+                  minLength: {
+                    value: 8,
+                    message: 'Confirm Password must have at least 8 characters',
+                  },
+                  validate: (value) => {
+                    return value === password.current ||
+                      'The passwords do not match';
+                  },
+                })}
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="current-password"
+                helperText={
+                  errors.confirmPassword ? errors.confirmPassword.message : null
                 }
               />
             </Grid>
