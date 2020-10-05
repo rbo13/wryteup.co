@@ -58,38 +58,28 @@ export default function SignUp() {
   const {register, handleSubmit, errors} = useForm();
   const [openAlert, setOpenAlert] = React.useState({
     open: false,
-    success: true,
+    success: false,
     message: '',
   });
 
   const {open, success, message} = openAlert;
-
-  const userSignup = async (form) => {
+  const userSignup = (form) => {
     const {email, password} = form;
-
-    try {
-      const response = await signup({
-        email,
-        password,
-      });
+    signup({
+      email,
+      password,
+    }).then((response) => {
       setOpenAlert({
         open: true,
         success: true,
         message: response.message,
       });
-      return;
-    } catch (err) {
-      // setOpenAlert({
-      //   open: true,
-      //   success: false,
-      //   message: err.message,
-      // });
-    }
-  };
-
-  const handleClose = () => {
-    setOpenAlert({
-      open: false,
+    }).catch((err) => {
+      setOpenAlert({
+        open: true,
+        success: false,
+        message: err.message,
+      });
     });
   };
 
@@ -187,9 +177,19 @@ export default function SignUp() {
         }}
         open={open}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={() => {
+          setOpenAlert({
+            open: false,
+            success: success,
+          });
+        }}
       >
-        <Alert onClose={handleClose} severity={success ? 'success' : 'error'}>
+        <Alert onClose={() => {
+          setOpenAlert({
+            open: false,
+            success: success,
+          });
+        }} severity={success ? 'success' : 'error'}>
           {message}
         </Alert>
       </Snackbar>
