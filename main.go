@@ -89,7 +89,7 @@ func main() {
 	writeup.Get("/user/:user_id", h.GetAllWriteupsFromUser)
 
 	// error handler
-	app.Get("/", fallback)
+	app.Get("*", fallback)
 	app.Use(notFound)
 
 	PORT := ":" + os.Getenv("APP_PORT")

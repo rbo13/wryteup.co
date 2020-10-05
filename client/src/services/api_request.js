@@ -12,6 +12,15 @@ async function login({email, password}) {
   return loginResponse;
 }
 
+async function signup({email, password}) {
+  const endpoint = 'signup';
+  const data = {
+    email_address: email,
+    password,
+  };
+  return client(endpoint, {data});
+}
+
 async function client(
     endpoint,
     {data, token, headers: customHeaders, ...customConfig} = {},
@@ -41,7 +50,7 @@ async function client(
         const data = await response.json();
         if (!response.ok) {
           return Promise.reject(
-              new Error('Something went wrong with the request'),
+              new Error(data.message),
           );
         }
 
@@ -52,4 +61,5 @@ async function client(
 export {
   client,
   login,
+  signup,
 };
