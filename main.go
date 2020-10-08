@@ -70,6 +70,7 @@ func main() {
 	// unprotected routes
 	app.Post("/login", h.Login)
 	app.Post("/signup", h.Signup)
+	app.Get("/logout", h.Logout)
 
 	// protected routes
 	api := app.Group("/api/v1")
