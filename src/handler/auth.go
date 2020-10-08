@@ -15,6 +15,7 @@ import (
 )
 
 const SALT_ROUNDS = bcrypt.DefaultCost
+const ErrNoResultSet = "sql: no rows in result set"
 
 // Login handles the login request.
 func (h *Handler) Login(c *fiber.Ctx) error {
@@ -62,10 +63,48 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 		})
 	}
 
+	currentUser, err := h.db.GetUserByAccount(c.Context(), accountInfo.ID)
+	if err != nil {
+		if err.Error() != ErrNoResultSet {
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"message": err.Error(),
+				"data":    nil,
+			})
+		}
+	}
+
+	// set cookie
+	cookie := new(fiber.Cookie)
+	cookie.Name = "authToken"
+	cookie.Value = t
+	cookie.Expires = time.Now().Add(1 * time.Hour)
+
+	c.Cookie(cookie)
+
 	return c.Status(http.StatusOK).JSON(&fiber.Map{
 		"success": true,
 		"message": "Logged in successfully",
-		"token":   t,
+		"data": map[string]interface{}{
+			"token":      t,
+			"account_id": accountInfo.ID,
+			"user":       currentUser,
+		},
+	})
+}
+
+func (h *Handler) Logout(c *fiber.Ctx) error {
+	expireAt := time.Unix(0, 0)
+
+	cookie := new(fiber.Cookie)
+	cookie.Name = "authToken"
+	cookie.Value = ""
+	cookie.Expires = expireAt
+
+	c.Cookie(cookie)
+	return c.Status(http.StatusOK).JSON(&fiber.Map{
+		"success": true,
+		"message": "Logged-out successfully",
 	})
 }
 
