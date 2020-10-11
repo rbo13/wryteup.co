@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -14,7 +14,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useForm} from 'react-hook-form';
-import {signup} from '../services/api_request';
+// import {signup} from '../services/api_request';
+import {useAuth} from '../context/auth-context';
+import {useAsync} from '../utils/hooks';
 
 function Copyright() {
   return (
@@ -55,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const {isLoading, isError, error, run} = useAsync();
+  const {signup} = useAuth();
   const {register, handleSubmit, errors, watch} = useForm();
   const password = React.useRef({});
   password.current = watch('password', '');
@@ -68,23 +73,11 @@ export default function SignUp() {
   const {open, success, message} = openAlert;
   const userSignup = (form) => {
     const {email, password} = form;
-    signup({
+    run(signup({
       email,
       password,
-    }).then((response) => {
-      setOpenAlert({
-        open: true,
-        success: true,
-        message: 'Please login to continue',
-      });
-      setTimeout(() => window.location.href = '/login', 3000);
-    }).catch((err) => {
-      setOpenAlert({
-        open: true,
-        success: false,
-        message: err.message,
-      });
-    });
+    }));
+    navigate('/login');
   };
 
   return (
@@ -183,8 +176,9 @@ export default function SignUp() {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            {isLoading ? 'Signing up' : 'Signup'}
           </Button>
+          {isError ? error : null }
           <Grid container justify="flex-end">
             <Grid item>
               <Link

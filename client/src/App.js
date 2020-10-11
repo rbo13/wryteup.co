@@ -1,10 +1,11 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import PrimarySearchAppBar from './components/AppBar';
+// import {FullpageSpinner} from './components/FullpageSpinner';
+// import PrimarySearchAppBar from './components/AppBar';
 import {AuthenticatedApp} from './authenticated-app';
 import {UnauthenticatedApp} from './unauthenticated-app';
-import {GlobalContext} from './context';
+import {useAuth} from './context/auth-context';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -12,21 +13,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// const AuthenticatedApp = React.lazy(() =>
+//   import (/* webpackPrefetch: true*/ './authenticated-app'),
+// );
+// const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
+
 function App() {
   const classes = useStyles();
-  const {authenticated} = React.useContext(GlobalContext);
-
+  const {user} = useAuth();
+  // const {authenticated} = React.useContext(GlobalContext);
   return (
-    <div>
-      <PrimarySearchAppBar />
-      <Container component="main" className={classes.main} maxWidth="sm">
-        { authenticated ?
-          <AuthenticatedApp /> :
-          <UnauthenticatedApp />
-        }
-      </Container>
-    </div>
+    <Container
+      component="main"
+      className={classes.main}
+      maxWidth="sm"
+    >
+      { user ? <AuthenticatedApp /> : <UnauthenticatedApp /> }
+    </Container>
   );
+
+  // return (
+  //   <div>
+  //     {/* <PrimarySearchAppBar /> */}
+  //     <Container component="main" className={classes.main} maxWidth="sm">
+  //       { user ? <AuthenticatedApp /> : <UnauthenticatedApp /> }
+
+  //       {/* { authenticated ? */}
+  //       {/*   <AuthenticatedApp /> : */}
+  //       {/*   <UnauthenticatedApp /> */}
+  //       {/* } */}
+  //     </Container>
+  //   </div>
+  // );
 }
 
 export default App;

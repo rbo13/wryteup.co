@@ -13,7 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import {GlobalContext} from '../context';
+// import {GlobalContext} from '../context';
 import {
   AuthMenu,
   AuthMobileMenu,
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar() {
   const classes = useStyles();
-  const {authenticated} = React.useContext(GlobalContext);
+  // const {authenticated} = React.useContext(GlobalContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 

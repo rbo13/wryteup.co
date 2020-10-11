@@ -3,16 +3,16 @@ import ReactDOM from 'react-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {ThemeProvider} from '@material-ui/core/styles';
 import App from './App';
-import {AppProvider} from './context';
+import {AppProviders} from './context';
 import * as serviceWorker from './serviceWorker';
 import theme from './theme';
 
 ReactDOM.render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppProvider>
+      <AppProviders>
         <App />
-      </AppProvider>
+      </AppProviders>
     </ThemeProvider>,
     document.getElementById('root'),
 );

@@ -1,7 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
 } from 'react-router-dom';
 import {AuthHome} from './home';
@@ -9,16 +8,10 @@ import {Profile} from './profile';
 
 const AuthenticatedApp = () => {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <AuthHome />
-        </Route>
-        <Route exact path="/profile">
-          <Profile />
-        </Route>
-      </Switch>
-    </Router>
+    <Routes>
+      <Route exact path="/" element={<AuthHome />} />
+      <Route exact path="/profile" element={<Profile />} />
+    </Routes>
   );
 };
 

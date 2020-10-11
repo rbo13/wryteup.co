@@ -77,6 +77,7 @@ func main() {
 	api.Use(jwtware.New(jwtware.Config{
 		SigningKey: []byte(os.Getenv("JWT_SIGNINGKEY")),
 	}))
+	api.Get("/bootstrap", h.BootstrapData)
 	user := api.Group("/users")
 	user.Post("/", h.Create)
 	user.Get("/", h.UserList)

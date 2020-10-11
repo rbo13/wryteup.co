@@ -1,40 +1,28 @@
 import React from 'react';
-import {reducer, ACTION_LOGIN} from './reducer';
+import {BrowserRouter as Router} from 'react-router-dom';
+import {ReactQueryConfigProvider} from 'react-query';
+import {AuthProvider} from './auth-context';
 
-const initialState = {
-  authenticated: false,
-  user: Object.assign({}, null),
-  authToken: '',
+const queryConfig = {
+  queries: {
+    useErrorBoundary: true,
+    refetchOnWindowFocus: false,
+    retry(failureCount, error) {
+      if (error.status === 404) return false;
+      else if (failureCount < 2) return true;
+      else return false;
+    },
+  },
 };
 
-const GlobalContext = React.createContext(initialState);
-GlobalContext.displayName = 'GlobalContext';
-
-const AppProvider = ({children}) => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  const userLogin = ({email, password}) => {
-    dispatch({
-      type: ACTION_LOGIN,
-      payload: {
-        email,
-        password,
-      },
-    });
-  };
-
+function AppProviders({children}) {
   return (
-    <GlobalContext.Provider
-      value={{
-        user: state.user,
-        authToken: state.authToken,
-        authenticated: state.authenticated,
-        userLogin,
-      }}
-    >
-      { children }
-    </GlobalContext.Provider>
+    <ReactQueryConfigProvider config={queryConfig}>
+      <Router>
+        <AuthProvider>{children}</AuthProvider>
+      </Router>
+    </ReactQueryConfigProvider>
   );
-};
+}
 
-export {GlobalContext, AppProvider};
+export {AppProviders};

@@ -1,7 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
 } from 'react-router-dom';
 import {Landing} from './home';
@@ -10,19 +9,11 @@ import Login from '../screens/Login';
 
 const UnauthenticatedApp = () => {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Landing />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/signup">
-          <Signup />
-        </Route>
-      </Switch>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+    </Routes>
   );
 };
 
