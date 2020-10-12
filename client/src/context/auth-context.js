@@ -3,6 +3,7 @@ import {queryCache} from 'react-query';
 import * as auth from '../auth-provider';
 import {client} from '../utils/api-client';
 import {useAsync} from '../utils/hooks';
+import {FullPageError} from '../screens/FullPageError';
 
 async function bootstrapAppData() {
   let user = null;
@@ -71,7 +72,7 @@ function AuthProvider(props) {
   }
 
   if (isError) {
-    return <div> I have an error {error} </div>;
+    return <FullPageError error={error} />;
   }
 
   if (isSuccess) {
@@ -91,9 +92,8 @@ function useAuth() {
 
 function useClient() {
   const {user} = useAuth();
-  console.log(`useClient user: ${user}`);
-  const token = user.token;
-  // const token = user?.token;
+  // const token = user.token;
+  const token = user?.token;
   return React.useCallback(
       (endpoint, config) => client(endpoint, {...config, token}),
       [token],

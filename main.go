@@ -10,6 +10,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/helmet/v2"
@@ -111,6 +112,11 @@ func initializeMiddlewares(app *fiber.App) *fiber.App {
 		}),
 		favicon.New(favicon.Config{
 			File: favIco,
+		}),
+		cors.New(cors.Config{
+			AllowOrigins: "http://localhost:3000",
+			AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+			AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 		}),
 		helmet.New(),
 	)

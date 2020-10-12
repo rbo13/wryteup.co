@@ -48,11 +48,13 @@ func (h *Handler) BootstrapData(c *fiber.Ctx) error {
 	}
 	userAndAccountInfo, err := h.db.GetUserAndAccountInfo(c.Context(), accountUUID)
 	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
-			"success": false,
-			"message": err.Error(),
-			"data":    nil,
-		})
+		if err.Error() != ErrNoResultSet {
+			return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+				"success": false,
+				"message": err.Error(),
+				"data":    nil,
+			})
+		}
 	}
 
 	return c.Status(http.StatusOK).JSON(&fiber.Map{
