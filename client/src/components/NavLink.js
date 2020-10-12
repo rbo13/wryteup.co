@@ -1,4 +1,5 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -25,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
 
 const AuthLink = () => {
   const {logout} = useAuth();
+  const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -38,6 +41,11 @@ const AuthLink = () => {
 
   const signout = () => {
     logout();
+    setAnchorEl(null);
+  };
+
+  const profile = () => {
+    navigate('/profile');
     setAnchorEl(null);
   };
 
@@ -67,7 +75,7 @@ const AuthLink = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={profile}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={signout}>Logout</MenuItem>
       </Menu>

@@ -8,4 +8,4 @@ const AuthHome = () => {
   );
 };
 
-export {AuthHome}
+export {AuthHome};
