@@ -1,3 +1,5 @@
+const authURL = process.env.REACT_APP_AUTH_URL;
+
 const localStorageKey = '__auth_provider_token__';
 
 async function getToken() {
@@ -5,8 +7,6 @@ async function getToken() {
 }
 
 function handleUserResponse({data, success}) {
-  console.log(data);
-  console.log(success);
   if (data !== undefined) {
     window.localStorage.setItem(localStorageKey, data.token);
     return data;
@@ -28,12 +28,26 @@ function register({email, password}) {
   }).then(handleUserResponse);
 }
 
-async function logout() {
-  window.localStorage.removeItem(localStorageKey);
-  window.localStorage.clear();
+function signout() {
+  return window.fetch(`${authURL}/logout`, {
+    method: 'GET',
+  });
 }
 
-const authURL = process.env.REACT_APP_AUTH_URL;
+async function logout() {
+  signout()
+      .then((res) => {
+        if (!res.ok) {
+          return Promise.reject(new Error('Cannot logout'));
+        }
+        return res.json();
+      })
+      .then(() => {
+        window.localStorage.removeItem(localStorageKey);
+        window.localStorage.clear();
+      });
+}
+
 
 async function client(endpoint, data) {
   const config = {
