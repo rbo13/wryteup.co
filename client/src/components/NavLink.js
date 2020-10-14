@@ -41,6 +41,7 @@ const AuthLink = () => {
 
   const signout = () => {
     logout();
+    navigate('/login');
     setAnchorEl(null);
   };
 
