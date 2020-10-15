@@ -2,6 +2,13 @@ import {queryCache} from 'react-query';
 import * as auth from '../auth-provider';
 const apiURL = process.env.REACT_APP_API_URL;
 
+async function profile({authToken, payload}) {
+  return client('users', {
+    data: payload,
+    token: authToken,
+  });
+}
+
 async function client(
     endpoint,
     {data, token, headers: customHeaders, ...customConfig} = {},
@@ -35,4 +42,7 @@ async function client(
       });
 }
 
-export {client};
+export {
+  client,
+  profile,
+};

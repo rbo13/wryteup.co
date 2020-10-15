@@ -7,7 +7,7 @@ async function getToken() {
 }
 
 function handleUserResponse({data, success}) {
-  if (data !== undefined) {
+  if (data !== undefined || data !== null) {
     window.localStorage.setItem(localStorageKey, data.token);
     return data;
   }

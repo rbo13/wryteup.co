@@ -17,7 +17,6 @@ import Container from '@material-ui/core/Container';
 import {useAuth} from '../context/auth-context';
 import {useAsync} from '../utils/hooks';
 
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -58,13 +57,16 @@ export default function Login() {
   const {login} = useAuth();
   const {register, handleSubmit, errors} = useForm();
 
-  const userLogin = (form) => {
+  const userLogin = async (form) => {
     const {email, password} = form;
     run(login({
       email,
       password,
-    }));
-    navigate('/');
+    }))
+        .then(navigate('/'))
+        .catch((e) => {
+          alert(e.message);
+        });
   };
 
   return (
